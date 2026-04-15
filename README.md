@@ -10,14 +10,10 @@ MauiHelpMode is a .Net Maui package that adds an ElementHighlighter and the Help
 | macOS    | :x:                |
 | Tizen    | :x:                |
 
-## ElementHighlighter
-
-
-## HelpMode
-
+**Note:** Only .Net 10 is supported
 
 ## GridPosition
-To assign which part of the screen to highlight the program uses a custom GridPosition class similar to how you assign grid positioning in Maui.
+To assign which part of the screen to highlight the program uses a custom GridPosition class similar to how you assign grid positioning in Maui with the following properties.
 
 ```c#
 public class GridPosition
