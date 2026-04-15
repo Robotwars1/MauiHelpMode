@@ -33,23 +33,7 @@ public class GridPosition
     public double Width = -1;
     public double Height = -1;
 
-    public HorizontalAlignment HorizontalOptions = HorizontalAlignment.LeftAligned;
-    public VerticalAlignment VerticalOptions = VerticalAlignment.TopAligned;
-}
-```
-
-```c#
-public enum HorizontalAlignment
-{
-    LeftAligned,
-    CenterAligned, 
-    RightAligned
-}
-
-public enum VerticalAlignment
-{
-    TopAligned,
-    CenterAligned,
-    BottomAligned
+    public LayoutOptions HorizontalOptions = LayoutOptions.Start;
+    public LayoutOptions VerticalOptions = LayoutOptions.Start;
 }
 ```

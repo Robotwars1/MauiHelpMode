@@ -118,7 +118,7 @@ public partial class ElementHighlighter : ContentView
 
     private (double[], double[]) CalcGridProperties(GridPosition Position)
     {
-        // Calc each Row and Colum height
+        // Calc each Row and Column height
         double[] RowHeights = new double[3];
         double[] ColumnWidths = new double[3];
 
@@ -138,11 +138,11 @@ public partial class ElementHighlighter : ContentView
         {
             double LeftOverWidth = ColumnWidths[1] - Position.Width;
 
-            if (Position.HorizontalOptions == HorizontalAlignment.LeftAligned)
+            if (Position.HorizontalOptions == LayoutOptions.Start)
             {
                 ColumnWidths[2] += LeftOverWidth;
             }
-            else if (Position.HorizontalOptions == HorizontalAlignment.CenterAligned)
+            else if (Position.HorizontalOptions == LayoutOptions.Center)
             {
                 ColumnWidths[0] += LeftOverWidth / 2;
                 ColumnWidths[2] += LeftOverWidth / 2;
@@ -159,11 +159,11 @@ public partial class ElementHighlighter : ContentView
         {
             double LeftOverHeight = RowHeights[1] - Position.Height;
 
-            if (Position.VerticalOptions == VerticalAlignment.TopAligned)
+            if (Position.VerticalOptions == LayoutOptions.Start)
             {
                 RowHeights[2] += LeftOverHeight;
             }
-            else if (Position.VerticalOptions == VerticalAlignment.CenterAligned)
+            else if (Position.VerticalOptions == LayoutOptions.Center)
             {
                 RowHeights[0] += LeftOverHeight / 2;
                 RowHeights[2] += LeftOverHeight / 2;

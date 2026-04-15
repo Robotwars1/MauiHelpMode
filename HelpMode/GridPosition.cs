@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace HelpMode
+﻿namespace HelpMode
 {
     public class GridPosition
     {
@@ -15,21 +13,7 @@ namespace HelpMode
         public double Width = -1;
         public double Height = -1;
 
-        public HorizontalAlignment HorizontalOptions = HorizontalAlignment.LeftAligned;
-        public VerticalAlignment VerticalOptions = VerticalAlignment.TopAligned;
-    }
-
-    public enum HorizontalAlignment
-    {
-        LeftAligned,
-        CenterAligned, 
-        RightAligned
-    }
-
-    public enum VerticalAlignment
-    {
-        TopAligned,
-        CenterAligned,
-        BottomAligned
+        public LayoutOptions HorizontalOptions = LayoutOptions.Start;
+        public LayoutOptions VerticalOptions = LayoutOptions.Start;
     }
 }
