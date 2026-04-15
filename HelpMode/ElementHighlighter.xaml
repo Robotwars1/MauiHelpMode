@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HelpMode.ElementHighlighter">
+    
+    <Grid x:Name="MainGrid"
+          ColumnDefinitions="*, *, *"
+          RowDefinitions="*, *, *" >
+        <!-- Left Border -->
+        <Border Grid.RowSpan="3"
+                StrokeThickness="0"
+                BackgroundColor="#121212"
+                Opacity="0.9" />
+
+        <!-- Right Border -->
+        <Border Grid.Column="2"
+                Grid.RowSpan="3"
+                StrokeThickness="0"
+                BackgroundColor="#121212"
+                Opacity="0.9" />
+
+        <!-- Top Border -->
+        <Border Grid.Column="1"
+                StrokeThickness="0"
+                BackgroundColor="#121212"
+                Opacity="0.9" />
+
+        <!-- Bottom Border -->
+        <Border Grid.Column="1"
+                Grid.Row="2"
+                StrokeThickness="0"
+                BackgroundColor="#121212"
+                Opacity="0.9" />
+    </Grid>
+</ContentView>

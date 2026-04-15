@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:HelpMode"
+             x:Class="HelpMode.HelpMode"
+             x:DataType="local:HelpMode">
+
+    <Border BackgroundColor="#404040"
+            Stroke="#404040"
+            StrokeShape="RoundRectangle 10,10,10,10"
+            Opacity="0.95" >
+        <Grid>
+            <Label x:Name="HelpmodeTipLabel"
+                   Padding="10"
+                   TextColor="{Binding TextColor}"
+                   FontSize="20" />
+
+            <Label VerticalOptions="End"
+                   HorizontalOptions="Center"
+                   TextColor="{Binding TextColor}"
+                   FontSize="10"
+                   Text="Press anywhere to remove this popup" />
+        </Grid>
+    </Border>
+</ContentView>
