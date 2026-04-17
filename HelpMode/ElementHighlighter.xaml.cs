@@ -29,6 +29,12 @@ public partial class ElementHighlighter : ContentView
 
     private void CalcStarValues()
     {
+#if ANDROID
+        if (Platform.CurrentActivity == null) { return; }
+        if (Platform.CurrentActivity.ApplicationContext == null) { return; }
+        if (Platform.CurrentActivity.ApplicationContext.Resources == null) { return; }
+#endif
+
         double PixelDensity = DeviceDisplay.MainDisplayInfo.Density;
 
         // Get viewport size
@@ -89,6 +95,8 @@ public partial class ElementHighlighter : ContentView
 
         // Then divide left-over height by amount of stars
         StarWidth = (MaxWidth - AbsoluteValue) / Stars;
+
+        HasCalcedStarValue = true;
     }
 
     public void Highlight(GridPosition PositionToHighlight)
@@ -96,7 +104,6 @@ public partial class ElementHighlighter : ContentView
         if (!HasCalcedStarValue)
         {
             CalcStarValues();
-            HasCalcedStarValue = true;
         }
 
         var ReturnVals = CalcGridProperties(PositionToHighlight);
