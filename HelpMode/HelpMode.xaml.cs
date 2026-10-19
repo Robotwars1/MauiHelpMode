@@ -26,8 +26,9 @@ public partial class HelpMode : ContentView
     
     private static void OnTextColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        var Text = (HelpMode)bindable;
-        Text.TextColor = (Color)newValue;
+        var Control = (HelpMode)bindable;
+        Control.HelpmodeTipLabel.TextColor = (Color)newValue;
+        Control.CloseLabel.TextColor = (Color)newValue;
     }
 
     #endregion

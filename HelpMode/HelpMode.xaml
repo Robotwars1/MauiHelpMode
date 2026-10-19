@@ -18,7 +18,8 @@
                    TextColor="{Binding TextColor}"
                    FontSize="20" />
 
-            <Label Grid.Row="1"
+            <Label x:Name="CloseLabel"
+                   Grid.Row="1"
                    VerticalTextAlignment="Center"
                    HorizontalTextAlignment="Center"
                    TextColor="{Binding TextColor}"
