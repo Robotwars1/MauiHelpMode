@@ -1,19 +1,18 @@
-﻿namespace HelpMode
+﻿namespace HelpMode;
+
+public class GridPosition
 {
-    public class GridPosition
-    {
-        // By default Span is only 1 and sets both Column and Row to 0,0 (Top left of grid)
-        public int Column = 0;
-        public int ColumnSpan = 1;
+    // By default Span is only 1 and sets both Column and Row to 0,0 (Top left of grid)
+    public int Column { get; set; }
+    public int ColumnSpan { get; set; } = 1;
 
-        public int Row = 0;
-        public int RowSpan = 1;
+    public int Row { get; set; }
+    public int RowSpan { get; set; } = 1;
 
-        // -1 means fill all the available space
-        public double Width = -1;
-        public double Height = -1;
+    // -1 means fill all the available space
+    public double Width { get; set; } = -1;
+    public double Height { get; set; } = -1;
 
-        public LayoutOptions HorizontalOptions = LayoutOptions.Start;
-        public LayoutOptions VerticalOptions = LayoutOptions.Start;
-    }
+    public LayoutOptions HorizontalOptions { get; set; } = LayoutOptions.Start;
+    public LayoutOptions VerticalOptions { get; set; } = LayoutOptions.Start;
 }

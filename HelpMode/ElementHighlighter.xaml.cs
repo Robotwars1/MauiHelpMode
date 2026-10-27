@@ -2,28 +2,28 @@ namespace HelpMode;
 
 public partial class ElementHighlighter : ContentView
 {
-    private List<GridLength> Columns = [];
-    private List<GridLength> Rows = [];
+    private readonly List<GridLength> _columns = [];
+    private readonly List<GridLength> _rows = [];
 
-    private bool HasCalcedStarValue = false;
-    private double StarHeight = 0;
-    private double StarWidth = 0;
+    private bool _hasCalcedStarValue;
+    private double _starHeight;
+    private double _starWidth;
 
     public ElementHighlighter()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
     }
 
-    public void Setup(ColumnDefinitionCollection GridColumns, RowDefinitionCollection GridRows)
+    public void Setup(ColumnDefinitionCollection gridColumns, RowDefinitionCollection gridRows)
     {
-        // Parse and clean Columns and Rows to only save whats important (should in theory be better for memory usage)
-        for (int i = 0; i < GridColumns.Count; i++)
+        // Parse and clean _columns and _rows to only save whats important (should in theory be better for memory usage)
+        for (int i = 0; i < gridColumns.Count; i++)
         {
-            Columns.Add(GridColumns[i].Width);
+            _columns.Add(gridColumns[i].Width);
         }
-        for (int i = 0;i < GridRows.Count; i++)
+        for (int i = 0; i < gridRows.Count; i++)
         {
-            Rows.Add(GridRows[i].Height);
+            _rows.Add(gridRows[i].Height);
         }
     }
 
@@ -35,175 +35,175 @@ public partial class ElementHighlighter : ContentView
         if (Platform.CurrentActivity.ApplicationContext.Resources == null) { return; }
 #endif
 
-        double PixelDensity = DeviceDisplay.MainDisplayInfo.Density;
+        double pixelDensity = DeviceDisplay.MainDisplayInfo.Density;
 
         // Get viewport size
-        double ViewportHeight = DeviceDisplay.MainDisplayInfo.Height / PixelDensity;
-        double ViewportWidth = DeviceDisplay.MainDisplayInfo.Width / PixelDensity;
+        double viewportHeight = DeviceDisplay.MainDisplayInfo.Height / pixelDensity;
+        double viewportWidth = DeviceDisplay.MainDisplayInfo.Width / pixelDensity;
 
         // Declare vars before OS-specifics so it can always access them
-        double Statusbarheight = 0;
-        double Navbarheight = 0;
+        double statusBarHeight = 0;
+        double navBarHeight = 0;
 
 #if ANDROID
         // Get height of Statusbar
-        int Statusid = Platform.CurrentActivity.ApplicationContext.Resources.GetIdentifier("status_bar_height", "dimen", "android");
-        Statusbarheight = Platform.CurrentActivity.ApplicationContext.Resources.GetDimensionPixelSize(Statusid) / PixelDensity;
+        int statusID = Platform.CurrentActivity.ApplicationContext.Resources.GetIdentifier("status_bar_height", "dimen", "android");
+        statusBarHeight = Platform.CurrentActivity.ApplicationContext.Resources.GetDimensionPixelSize(statusID) / pixelDensity;
         // Get height of Navbar
-        int Navid = Platform.CurrentActivity.ApplicationContext.Resources.GetIdentifier("navigation_bar_height", "dimen", "android");
-        Navbarheight = Platform.CurrentActivity.ApplicationContext.Resources.GetDimensionPixelSize(Navid) / PixelDensity;
+        int navID = Platform.CurrentActivity.ApplicationContext.Resources.GetIdentifier("navigation_bar_height", "dimen", "android");
+        navBarHeight = Platform.CurrentActivity.ApplicationContext.Resources.GetDimensionPixelSize(navID) / pixelDensity;
 #endif
 
         // Then calc size of "interactable space"
-        double MaxHeight = ViewportHeight - Statusbarheight - Navbarheight;
-        double MaxWidth = ViewportWidth;
+        double maxHeight = viewportHeight - statusBarHeight - navBarHeight;
+        double maxWidth = viewportWidth;
 
         // Then find height for one star, first by getting left-over height
-        double AbsoluteValue = 0;
-        int Stars = 0;
-        for (int i = 0; i < Rows.Count; i++)
+        double absoluteValue = 0;
+        int stars = 0;
+        for (int i = 0; i < _rows.Count; i++)
         {
-            if (Rows[i].IsAbsolute)
+            if (_rows[i].IsAbsolute)
             {
-                AbsoluteValue += Rows[i].Value;
+                absoluteValue += _rows[i].Value;
             }
             // Else, meaning if star
             else
             {
-                Stars += (int)Rows[i].Value;
+                stars += (int)_rows[i].Value;
             }
         }
 
         // Then divide left-over height by amount of stars
-        StarHeight = (MaxHeight - AbsoluteValue) / Stars;
+        _starHeight = (maxHeight - absoluteValue) / stars;
 
         // Then find width for one star, first by getting left-over width
-        AbsoluteValue = 0;
-        Stars = 0;
-        for (int i = 0; i < Columns.Count; i++)
+        absoluteValue = 0;
+        stars = 0;
+        for (int i = 0; i < _columns.Count; i++)
         {
-            if (Columns[i].IsAbsolute)
+            if (_columns[i].IsAbsolute)
             {
-                AbsoluteValue += Columns[i].Value;
+                absoluteValue += _columns[i].Value;
             }
             // Else, meaning if star
             else
             {
-                Stars += (int)Columns[i].Value;
+                stars += (int)_columns[i].Value;
             }
         }
 
         // Then divide left-over height by amount of stars
-        StarWidth = (MaxWidth - AbsoluteValue) / Stars;
+        _starWidth = (maxWidth - absoluteValue) / stars;
 
-        HasCalcedStarValue = true;
+        _hasCalcedStarValue = true;
     }
 
-    public void Highlight(GridPosition PositionToHighlight)
+    public void Highlight(GridPosition positionToHighlight)
     {
-        if (!HasCalcedStarValue)
+        if (!_hasCalcedStarValue)
         {
             CalcStarValues();
         }
 
-        var ReturnVals = CalcGridProperties(PositionToHighlight);
+        (double[], double[]) returnVals = CalcGridProperties(positionToHighlight);
 
         MainGrid.ColumnDefinitions =
         [
-            new ColumnDefinition { Width = ReturnVals.Item1[0] },
-            new ColumnDefinition { Width = ReturnVals.Item1[1] },
-            new ColumnDefinition { Width = ReturnVals.Item1[2] }
+            new ColumnDefinition { Width = returnVals.Item1[0] },
+            new ColumnDefinition { Width = returnVals.Item1[1] },
+            new ColumnDefinition { Width = returnVals.Item1[2] }
         ];
 
         MainGrid.RowDefinitions =
         [
-            new RowDefinition { Height = ReturnVals.Item2[0] },
-            new RowDefinition { Height = ReturnVals.Item2[1] },
-            new RowDefinition { Height = ReturnVals.Item2[2] }
+            new RowDefinition { Height = returnVals.Item2[0] },
+            new RowDefinition { Height = returnVals.Item2[1] },
+            new RowDefinition { Height = returnVals.Item2[2] }
         ];
     }
 
-    private (double[], double[]) CalcGridProperties(GridPosition Position)
+    private (double[], double[]) CalcGridProperties(GridPosition position)
     {
         // Calc each Row and Column height
-        double[] RowHeights = new double[3];
-        double[] ColumnWidths = new double[3];
+        double[] rowHeights = new double[3];
+        double[] columnWidths = new double[3];
 
         // First Column and Row
-        ColumnWidths[0] = CalcSize(0, Position.Column, Columns, StarWidth);
-        RowHeights[0] = CalcSize(0, Position.Row, Rows, StarHeight);
+        columnWidths[0] = CalcSize(0, position.Column, _columns, _starWidth);
+        rowHeights[0] = CalcSize(0, position.Row, _rows, _starHeight);
 
         // Second Column and Row
-        ColumnWidths[1] = CalcSize(Position.Column, Position.Column + Position.ColumnSpan, Columns, StarWidth);
-        RowHeights[1] = CalcSize(Position.Row, Position.Row + Position.RowSpan, Rows, StarHeight);
+        columnWidths[1] = CalcSize(position.Column, position.Column + position.ColumnSpan, _columns, _starWidth);
+        rowHeights[1] = CalcSize(position.Row, position.Row + position.RowSpan, _rows, _starHeight);
 
         // Third Column and Row
-        ColumnWidths[2] = CalcSize(Position.Column + Position.ColumnSpan, Columns.Count, Columns, StarWidth);
-        RowHeights[2] = CalcSize(Position.Row + Position.RowSpan, Rows.Count, Rows, StarHeight);
+        columnWidths[2] = CalcSize(position.Column + position.ColumnSpan, _columns.Count, _columns, _starWidth);
+        rowHeights[2] = CalcSize(position.Row + position.RowSpan, _rows.Count, _rows, _starHeight);
 
-        if (Position.Width > 0)
+        if (position.Width > 0)
         {
-            double LeftOverWidth = ColumnWidths[1] - Position.Width;
+            double leftOverWidth = columnWidths[1] - position.Width;
 
-            if (Position.HorizontalOptions == LayoutOptions.Start)
+            if (position.HorizontalOptions == LayoutOptions.Start)
             {
-                ColumnWidths[2] += LeftOverWidth;
+                columnWidths[2] += leftOverWidth;
             }
-            else if (Position.HorizontalOptions == LayoutOptions.Center)
+            else if (position.HorizontalOptions == LayoutOptions.Center)
             {
-                ColumnWidths[0] += LeftOverWidth / 2;
-                ColumnWidths[2] += LeftOverWidth / 2;
+                columnWidths[0] += leftOverWidth / 2;
+                columnWidths[2] += leftOverWidth / 2;
             }
             // Right-aligned
             else
             {
-                ColumnWidths[0] += LeftOverWidth;
+                columnWidths[0] += leftOverWidth;
             }
 
-            ColumnWidths[1] = Position.Width;
+            columnWidths[1] = position.Width;
         }
-        if (Position.Height > 0)
+        if (position.Height > 0)
         {
-            double LeftOverHeight = RowHeights[1] - Position.Height;
+            double leftOverHeight = rowHeights[1] - position.Height;
 
-            if (Position.VerticalOptions == LayoutOptions.Start)
+            if (position.VerticalOptions == LayoutOptions.Start)
             {
-                RowHeights[2] += LeftOverHeight;
+                rowHeights[2] += leftOverHeight;
             }
-            else if (Position.VerticalOptions == LayoutOptions.Center)
+            else if (position.VerticalOptions == LayoutOptions.Center)
             {
-                RowHeights[0] += LeftOverHeight / 2;
-                RowHeights[2] += LeftOverHeight / 2;
+                rowHeights[0] += leftOverHeight / 2;
+                rowHeights[2] += leftOverHeight / 2;
             }
             // Bottom-aligned
             else
             {
-                RowHeights[0] += LeftOverHeight;
+                rowHeights[0] += leftOverHeight;
             }
 
-            RowHeights[1] = Position.Height;
+            rowHeights[1] = position.Height;
         }
 
-        return (ColumnWidths, RowHeights);
+        return (columnWidths, rowHeights);
     }
 
-    private static double CalcSize(int StartIndex,  int EndIndex, List<GridLength> List, double StarValue)
+    private static double CalcSize(int startIndex, int endIndex, List<GridLength> list, double starValue)
     {
-        double Size = 0;
+        double size = 0;
 
-        for (int i = StartIndex; i < EndIndex; i++)
+        for (int i = startIndex; i < endIndex; i++)
         {
-            if (List[i].IsAbsolute)
+            if (list[i].IsAbsolute)
             {
-                Size += List[i].Value;
+                size += list[i].Value;
             }
             // Else, meaning if star
             else
             {
-                Size += List[i].Value * StarValue;
+                size += list[i].Value * starValue;
             }
         }
 
-        return Size;
+        return size;
     }
 }
